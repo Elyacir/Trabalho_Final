@@ -15,6 +15,9 @@ namespace TrabalhoFinal.Presentation
 {
     public partial class Form1 : Form
     {
+
+        private List<Curso> _cursos;
+
         public Form1()
         {
             InitializeComponent();
@@ -37,6 +40,7 @@ namespace TrabalhoFinal.Presentation
            aluno.Cpf = textCPF.Text;
            aluno.Matricula = textMatricula.Text;
            aluno.QtdeCredito = Convert.ToInt32(textCreditos.Text);
+           aluno.Curso = _cursos.Where(c => c.Nome.Equals(comboCurso.SelectedItem.ToString())).FirstOrDefault();
            AlunoService service = new AlunoService(new AlunoRepository());
            service.Create(aluno);
         }
@@ -44,6 +48,17 @@ namespace TrabalhoFinal.Presentation
         private void button2_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            CursoService service = new CursoService(new CursoRepository());
+            _cursos = service.RetrieveAll();
+            foreach (var item in _cursos)
+	        {
+                comboCurso.Items.Add(item.Nome);
+	        }
+            
         }
     }
 }
